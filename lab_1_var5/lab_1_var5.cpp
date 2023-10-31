@@ -49,28 +49,51 @@ vector<double> gauss(vector<vector<double>>& A, vector<double>& b) {
 }
 
 
-// Вычисление нормы
-void norma(vector<vector<double>>& A) {
-    int pos = 0;
-    int n = A.size();
-    double* vektor = new double[n];
-    for (int i = 0; i < n; i++)
-        vektor[i] = 0;
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            vektor[pos] += abs(A[j][i]);
+double matrix_norm(const vector<vector<double>>& A) {
+    double norm = 0;
+    for (size_t j = 0; j < A[0].size(); ++j) {
+        double col_sum = 0;
+        for (size_t i = 0; i < A.size(); ++i) {
+            col_sum += abs(A[i][j]);
         }
-        pos++;
+        if (col_sum > norm) {
+            norm = col_sum;
+        }
     }
-    double max = vektor[0];
-    for (int i = 0; i < pos; i++)
-    {
-        if (vektor[i] > max) max = vektor[i];
-    }
-    cout << "Norma: " << max << endl;
+    return norm;
+}
 
+double norm(const vector<double>& v) {
+    double sum = 0;
+    for (double x : v) {
+        sum += x * x;
+    }
+    return sqrt(sum);
+}
+
+
+
+// функция для вычисления относительной погрешности метода Гаусса
+double relative_error(const vector<vector<double>>& A, const vector<double>& b, const vector<double>& x) {
+    // вычисляем вектор невязки
+    vector<double> r(b.size());
+    for (int i = 0; i < A.size(); i++) {
+        double sum = 0;
+        for (int j = 0; j < A[i].size(); j++) {
+            sum += A[i][j] * x[j];
+        }
+        r[i] = b[i] - sum;
+    }
+    // вычисляем норму матрицы и вектора x
+    double norm_A = matrix_norm(A);
+    double norm_x = norm(x);
+    for (int i = 0; i < x.size(); i++) {
+        norm_x += x[i] * x[i];
+    }
+    norm_x = sqrt(norm_x);
+
+    // вычисляем относительную погрешность
+    return norm(r) / (norm_A * norm_x);
 }
 // Вычисление погрешности
 void residual_vector(vector<vector<double>> A, vector<double>& b, vector<double>& x) {
@@ -89,6 +112,7 @@ void residual_vector(vector<vector<double>> A, vector<double>& b, vector<double>
         }
         res[i] = sum - b[i];
     }
+    cout << "residual vector: ";
     for (int i = 0; i < A.size(); i++) {
         cout << res[i] << " ";
     }
@@ -132,25 +156,32 @@ int main() {
     vector<double> b = { 10.21, 3.41, 12.29 };
     vector<double> New_b = { -4 * l_1 - 2 * l_2, -4 * l_1 + l_2 + 9 * l_3, -4 * l_1 + l_2 - 9 * l_3 };
     vector<double> x = gauss(A, b);
-    cout << "system solution:" << endl;
+    cout << endl << "system solution:" << endl;
     for (int i = 0; i < x.size(); i++) {
         cout << "x[" << i << "] = " << x[i] << endl;
 
     }
-    norma(A);
+    cout << "Norma: " << matrix_norm(A) << endl;
+   /* norma(A);*/
     residual_vector(A_1, b, x);
     cout << endl;
     double norm = norma(A, b, x);
-    cout << endl << "Norma of residual vector: " << norm << endl;
+    cout << "Norma of residual vector: " << norm << endl;
     vector<double> x_New = gauss(New_A, New_b);
-    cout << "system solution 2:" << endl;
+    double error = relative_error(A, b, x);
+    cout << "Relative error: " << error << endl;
+ 
+    cout << endl << "system solution 2:" << endl;
     for (int i = 0; i < x_New.size(); i++) {
         cout << "x[" << i << "] = " << x_New[i] << endl;
 
     }
-    norma(New_A);
+    cout << "Norma: " << matrix_norm(New_A) << endl;
+   /* norma(New_A);*/
     residual_vector(NewA_1, New_b, x_New);
     double norm_New = norma(New_A, New_b, x_New);
     cout << endl << "Norma of residual vector: " << norm_New << endl;
+    error = relative_error(New_A, New_b, x_New);
+    cout << "Relative error: " << error << endl;
     return 0;
 }
