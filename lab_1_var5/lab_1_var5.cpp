@@ -1,6 +1,5 @@
 ﻿
 //l1=-7.3,l2=8.39,l3=8.38
-#include <cfloat>
 #include <iostream>
 #include <vector>
 
@@ -50,14 +49,16 @@ vector<double> gauss( vector<vector<double>>& A,vector<double> &b) {
 
 
 // function for calculating the relative error of the Gauss method
-double relative_error(vector<vector<double>>& A, vector<double>& b2, const vector<double>& x) {
-    vector<double> x2(A.size(),0);
-    x2 = gauss(A, b2);
+double relative_error(vector<vector<double>>& A, vector<double>& result_b2, const vector<double>& x) {
+    vector<double> x2(A.size());
+    x2 = gauss(A, result_b2);
     double max_x = abs(x2[0]-x[0]);
     double maxd = max_x;
     for (int i = 0; i < x.size();i++) {
-        if (maxd < abs(x2[i] - x[i]))maxd = abs(x2[i] - x[i]);
-        if (max_x < x[i])max_x = x[i];
+        if (maxd < abs(x2[i] - x[i]))
+            maxd = abs(x2[i] - x[i]);
+      /*  if (max_x < x[i])max_x = x[i];*/
+        if (max_x < abs(x[i])) max_x = abs(x[i]);
     }
     
     return maxd/max_x;
@@ -76,7 +77,6 @@ double residual_vector(vector<vector<double>>& A, vector<double> b2,const vector
     for (int i = 0; i < res.size(); i++) {
         if (norma < res[i])norma = res[i];
     }
-   
     return norma;
 }
 
@@ -94,7 +94,7 @@ void output(vector<double>&x,vector<vector<double>>&a,vector<double>&b,vector<ve
     displaying_x(x);
 
     vector<double>res(a.size(),0);
-
+    
     cout << "Norma residual:" << residual_vector(A_1, b2, x, res) << endl;
     cout << "residual vector: ";
     for (int i = 0; i < res.size(); i++) {
@@ -115,12 +115,10 @@ int main() {
                                 {4.21, 7.92, -3.41} };
     vector<double> b = { 10.21, 3.41, 12.29 };
    
-
     vector<vector<double>> A_1 = A;
     vector<double> x(A.size(), 0);
     vector<double> b2(A.size(),0);
-    /*vector<double> b2 = {0,0,0};*/
-
+   
     vector<vector<double>> New_A{ {2 * l_1 + 4 * l_2, 2 * (l_1 - l_2), 2 * (l_1 - l_2)},
         {2 * (l_1 - l_2), 2 * l_1 + l_2 + 3 * l_3, 2 * l_1 + l_2 - 3 * l_3},
         {2 * (l_1 - l_2),2 * l_1 + l_2 - 3 * l_3, 2 * l_1 + l_2 + 3 * l_3 } };
