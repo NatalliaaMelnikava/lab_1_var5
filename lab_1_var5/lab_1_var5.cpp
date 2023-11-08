@@ -93,7 +93,7 @@ void output(vector<double>&x,vector<vector<double>>&a,vector<double>&b,vector<ve
     x = gauss(a, b);
     displaying_x(x);
 
-    vector<double>res(a.size(),0);
+    vector<double>res(a.size());
     
     cout << "Norma residual:" << residual_vector(A_1, b2, x, res) << endl;
     cout << "residual vector: ";
@@ -116,8 +116,8 @@ int main() {
     vector<double> b = { 10.21, 3.41, 12.29 };
    
     vector<vector<double>> A_1 = A;
-    vector<double> x(A.size(), 0);
-    vector<double> b2(A.size(),0);
+    vector<double> x(A.size());
+    vector<double> b2(A.size());
    
     vector<vector<double>> New_A{ {2 * l_1 + 4 * l_2, 2 * (l_1 - l_2), 2 * (l_1 - l_2)},
         {2 * (l_1 - l_2), 2 * l_1 + l_2 + 3 * l_3, 2 * l_1 + l_2 - 3 * l_3},
@@ -126,7 +126,7 @@ int main() {
    
     vector<double> New_b = { -4 * l_1 - 2 * l_2, -4 * l_1 + l_2 + 9 * l_3, -4 * l_1 + l_2 - 9 * l_3 };
    
-    vector<double> x_New(New_A.size(),0);
+    vector<double> x_New(New_A.size());
   
     output(x, A, b, A_1, b2);
 
