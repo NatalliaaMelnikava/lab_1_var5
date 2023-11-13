@@ -129,7 +129,7 @@
   <ItemGroup>
     <ClCompile Include="Calculating_and_displaying.cpp" />
     <ClCompile Include="Gauss.cpp" />
-    <ClCompile Include="lab_1_var5_main.cpp" />
+    <ClCompile Include="lab_1_var5cpp" />
     <ClCompile Include="Relative_error.cpp" />
     <ClCompile Include="Residual_vector.cpp" />
   </ItemGroup>

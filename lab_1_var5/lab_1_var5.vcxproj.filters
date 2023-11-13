@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="lab_1_var5_main.cpp">
+    <ClCompile Include="lab_1_var5cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Gauss.cpp">
